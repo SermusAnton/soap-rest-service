@@ -52,7 +52,7 @@ databaseChangeLog:
                     nullable: false
               - column:
                   name: price
-                  type: bigint
+                  type: decimal
               - column:
                   name: description
                   type: varchar(500)
@@ -88,6 +88,9 @@ databaseChangeLog:
               - column:
                   name: bill_number
                   type: int
+              - column:
+                  name: status
+                  type: varchar(20)
   - changeSet:
       id: 4
       author: job_seeker
@@ -131,3 +134,62 @@ databaseChangeLog:
               - column:
                   name: total_discount
                   type: float
+  - changeSet:
+      id: 5
+      author: job_seeker
+      comment: "Add users"
+      changes:
+        - insert:
+            tableName: clients
+            columns:
+              - column:
+                  name: name
+                  value: "Bob"
+              - column:
+                  name: discount1
+                  value: 9.99
+              - column:
+                  name: discount2
+                  value: 0
+        - insert:
+            tableName: clients
+            columns:
+              - column:
+                  name: name
+                  value: "Tom"
+              - column:
+                  name: discount1
+                  value: 50
+              - column:
+                  name: discount2
+                  value: 12.5
+        - insert:
+            tableName: products
+            columns:
+              - column:
+                  name: name
+                  value: "Book"
+              - column:
+                  name: price
+                  value: 10
+              - column:
+                  name: description
+                  value: "very interesting book"
+              - column:
+                  name: rating
+                  value: 7
+        - insert:
+            tableName: products
+            columns:
+              - column:
+                  name: name
+                  value: "Journal"
+              - column:
+                  name: price
+                  value: 5.05
+              - column:
+                  name: description
+                  value: "very interesting journal"
+              - column:
+                  name: rating
+                  value: 9

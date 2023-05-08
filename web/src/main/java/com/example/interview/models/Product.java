@@ -5,6 +5,7 @@ import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Size;
+import java.math.BigDecimal;
 
 @Entity
 @Table(name = "products")
@@ -22,7 +23,7 @@ public class Product {
 
     // Храним в копейках, делим на 100
     @Column(name = "price")
-    private long price;
+    private BigDecimal price;
 
     @Size(max = 500, message = "Description should be equal or less than 500 characters")
     @Column(name = "description")
@@ -51,11 +52,11 @@ public class Product {
         this.name = name;
     }
 
-    public long getPrice() {
+    public BigDecimal getPrice() {
         return price;
     }
 
-    public void setPrice(long price) {
+    public void setPrice(BigDecimal price) {
         this.price = price;
     }
 

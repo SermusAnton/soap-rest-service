@@ -5,10 +5,12 @@ import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Size;
+import javax.xml.bind.annotation.XmlRootElement;
 import java.util.List;
 
 @Entity
 @Table(name = "clients")
+@XmlRootElement(name = "Client")
 public class Client {
     @Id
     @Column(name = "id")
@@ -51,7 +53,7 @@ public class Client {
         this.name = name;
     }
 
-    public double getDiscount1() {
+    public float getDiscount1() {
         return discount1;
     }
 
@@ -59,7 +61,7 @@ public class Client {
         this.discount1 = discount1;
     }
 
-    public double getDiscount2() {
+    public float getDiscount2() {
         return discount2;
     }
 

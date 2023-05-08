@@ -29,6 +29,10 @@ public class Sale {
     @OneToMany(mappedBy = "sale")
     private List<Order> orders;
 
+    @Enumerated(EnumType.STRING)
+    @Column(name = "status")
+    private SaleStatus status;
+
     public Sale() {}
 
     public long getId() {
@@ -69,5 +73,13 @@ public class Sale {
 
     public void setOrders(List<Order> orders) {
         this.orders = orders;
+    }
+
+    public SaleStatus getStatus() {
+        return status;
+    }
+
+    public void setStatus(SaleStatus status) {
+        this.status = status;
     }
 }
