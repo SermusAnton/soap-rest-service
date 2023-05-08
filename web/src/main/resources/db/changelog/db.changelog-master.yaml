@@ -1,0 +1,133 @@
+databaseChangeLog:
+  - logicalFilePath: db/changelog/db.changelog-master.yaml
+  - changeSet:
+      id: 1
+      author: job_seeker
+      comment: "Create table clients"
+      changes:
+        - createTable:
+            tableName: clients
+            columns:
+              - column:
+                  name: id
+                  type: bigint
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    primaryKeyName: pk_clients_id
+                    nullable: false
+              - column:
+                  name: name
+                  type: varchar(30)
+                  constraints:
+                    unique: true
+                    nullable: false
+              - column:
+                  name: discount1
+                  type: float
+              - column:
+                  name: discount2
+                  type: float
+  - changeSet:
+      id: 2
+      author: job_seeker
+      comment: "Create table products"
+      changes:
+        - createTable:
+            tableName: products
+            columns:
+              - column:
+                  name: id
+                  type: bigint
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    primaryKeyName: pk_products_id
+                    nullable: false
+              - column:
+                  name: name
+                  type: varchar(30)
+                  constraints:
+                    unique: true
+                    nullable: false
+              - column:
+                  name: price
+                  type: bigint
+              - column:
+                  name: description
+                  type: varchar(500)
+              - column:
+                  name: rating
+                  type: int
+  - changeSet:
+      id: 3
+      author: job_seeker
+      comment: "Create table sales"
+      changes:
+        - createTable:
+            tableName: sales
+            columns:
+              - column:
+                  name: id
+                  type: bigint
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    primaryKeyName: pk_sales_id
+                    nullable: false
+              - column:
+                  name: client_id
+                  type: bigint
+                  constraints:
+                    nullable: false
+                    foreignKeyName: fk_sales_client_id
+                    references: clients(id)
+              - column:
+                  name: date_of_sale
+                  type: date
+              - column:
+                  name: bill_number
+                  type: int
+  - changeSet:
+      id: 4
+      author: job_seeker
+      comment: "Create table orders"
+      changes:
+        - createTable:
+            tableName: orders
+            columns:
+              - column:
+                  name: id
+                  type: bigint
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    primaryKeyName: pk_orders_id
+                    nullable: false
+              - column:
+                  name: sale_id
+                  type: bigint
+                  constraints:
+                    nullable: false
+                    foreignKeyName: fk_orders_sale_id
+                    references: sales(id)
+                    onDelete: CASCADE
+              - column:
+                  name: product_id
+                  type: bigint
+                  constraints:
+                    nullable: false
+                    foreignKeyName: fk_orders_product_id
+                    references: products(id)
+              - column:
+                  name: count
+                  type: int
+              - column:
+                  name: initial_total_price
+                  type: bigint
+              - column:
+                  name: end_total_price
+                  type: bigint
+              - column:
+                  name: total_discount
+                  type: float
