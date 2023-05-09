@@ -9,4 +9,6 @@ import java.util.List;
 public interface ClientSoapService {
 
     List<Client> getAllClients();
+
+    void setProductRating(long clientId, long productId, int rating);
 }

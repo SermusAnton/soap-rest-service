@@ -5,12 +5,11 @@ import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Size;
-import javax.xml.bind.annotation.XmlRootElement;
+import java.math.BigDecimal;
 import java.util.List;
 
 @Entity
 @Table(name = "clients")
-@XmlRootElement(name = "Client")
 public class Client {
     @Id
     @Column(name = "id")
@@ -25,12 +24,12 @@ public class Client {
     @Min(value = 0, message = "The discount1 must be positive")
     @Max(value = 100, message = "The discount1 must be less than 100")
     @Column(name = "discount1")
-    private float discount1;
+    private BigDecimal discount1;
 
     @Min(value = 0, message = "The discount2 must be positive")
     @Max(value = 100, message = "The discount2 must be less than 100")
     @Column(name = "discount2")
-    private float discount2;
+    private BigDecimal discount2;
 
     @OneToMany(mappedBy = "client")
     private List<Sale> sales;
@@ -53,19 +52,19 @@ public class Client {
         this.name = name;
     }
 
-    public float getDiscount1() {
+    public BigDecimal getDiscount1() {
         return discount1;
     }
 
-    public void setDiscount1(float discount1) {
+    public void setDiscount1(BigDecimal discount1) {
         this.discount1 = discount1;
     }
 
-    public float getDiscount2() {
+    public BigDecimal getDiscount2() {
         return discount2;
     }
 
-    public void setDiscount2(float discount2) {
+    public void setDiscount2(BigDecimal discount2) {
         this.discount2 = discount2;
     }
 

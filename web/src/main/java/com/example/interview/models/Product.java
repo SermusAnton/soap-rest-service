@@ -34,13 +34,16 @@ public class Product {
     @Column(name = "rating")
     private int rating;
 
+    @Column(name = "discount")
+    private BigDecimal discount;
+
     public Product() {}
 
     public long getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(long id) {
         this.id = id;
     }
 
@@ -74,5 +77,13 @@ public class Product {
 
     public void setRating(int rating) {
         this.rating = rating;
+    }
+
+    public BigDecimal getDiscount() {
+        return discount;
+    }
+
+    public void setDiscount(BigDecimal discount) {
+        this.discount = discount;
     }
 }

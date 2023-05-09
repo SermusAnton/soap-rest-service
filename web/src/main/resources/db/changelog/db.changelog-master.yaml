@@ -24,10 +24,10 @@ databaseChangeLog:
                     nullable: false
               - column:
                   name: discount1
-                  type: float
+                  type: decimal
               - column:
                   name: discount2
-                  type: float
+                  type: decimal
   - changeSet:
       id: 2
       author: job_seeker
@@ -59,6 +59,9 @@ databaseChangeLog:
               - column:
                   name: rating
                   type: int
+              - column:
+                  name: discount
+                  type: decimal
   - changeSet:
       id: 3
       author: job_seeker
@@ -87,7 +90,7 @@ databaseChangeLog:
                   type: date
               - column:
                   name: bill_number
-                  type: int
+                  type: varchar(6)
               - column:
                   name: status
                   type: varchar(20)
@@ -127,17 +130,17 @@ databaseChangeLog:
                   type: int
               - column:
                   name: initial_total_price
-                  type: bigint
+                  type: decimal
               - column:
                   name: end_total_price
-                  type: bigint
+                  type: decimal
               - column:
                   name: total_discount
-                  type: float
+                  type: decimal
   - changeSet:
       id: 5
       author: job_seeker
-      comment: "Add users"
+      comment: "Add data"
       changes:
         - insert:
             tableName: clients
@@ -178,6 +181,9 @@ databaseChangeLog:
               - column:
                   name: rating
                   value: 7
+              - column:
+                  name: discount
+                  value: 2.5
         - insert:
             tableName: products
             columns:
@@ -193,3 +199,57 @@ databaseChangeLog:
               - column:
                   name: rating
                   value: 9
+              - column:
+                  name: discount
+                  value: 0
+  - changeSet:
+      id: 6
+      author: job_seeker
+      comment: "Create table bill"
+      changes:
+        - createTable:
+            tableName: bill
+            columns:
+              - column:
+                  name: date_of_sale
+                  type: date
+                  constraints:
+                    nullable: false
+                    primaryKey: true
+                    primaryKeyName: pk_bill_id
+              - column:
+                  name: number
+                  type: int
+                  constraints:
+                    nullable: false
+                    primaryKey: true
+                    primaryKeyName: pk_bill_id
+  - changeSet:
+      id: 7
+      author: job_seeker
+      comment: "Create table product_ratings"
+      changes:
+        - createTable:
+            tableName: product_ratings
+            columns:
+              - column:
+                  name: client_id
+                  type: bigint
+                  constraints:
+                    nullable: false
+                    primaryKey: true
+                    primaryKeyName: pk_product_rating_id
+                    foreignKeyName: fk_product_rating_client_id
+                    references: clients(id)
+              - column:
+                  name: product_id
+                  type: bigint
+                  constraints:
+                    nullable: false
+                    primaryKey: true
+                    primaryKeyName: pk_product_rating_id
+                    foreignKeyName: fk_product_rating_product_id
+                    references: products(id)
+              - column:
+                  name: rating
+                  type: int

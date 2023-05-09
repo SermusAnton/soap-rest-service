@@ -3,7 +3,7 @@ package com.example.interview.models;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
-import java.util.Date;
+import java.time.LocalDate;
 import java.util.List;
 
 @Entity
@@ -12,26 +12,26 @@ public class Sale {
 
     @Id
     @Column(name = "id")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
     @ManyToOne
     @JoinColumn(name = "client_id", referencedColumnName = "id")
     private Client client;
 
-    @Temporal(TemporalType.DATE)
     @DateTimeFormat(pattern = "dd/MM/yyyy") //дд/мм/гггг
     @Column(name = "date_of_sale")
-    private Date dateOfSale;
+    private LocalDate dateOfSale;
 
     @Column(name = "bill_number")
-    private int billNumber;
+    private String billNumber;
 
     @OneToMany(mappedBy = "sale")
     private List<Order> orders;
 
     @Enumerated(EnumType.STRING)
     @Column(name = "status")
-    private SaleStatus status;
+    private SaleStatus status = SaleStatus.OFFER;
 
     public Sale() {}
 
@@ -51,19 +51,19 @@ public class Sale {
         this.client = client;
     }
 
-    public Date getDateOfSale() {
+    public LocalDate getDateOfSale() {
         return dateOfSale;
     }
 
-    public void setDateOfSale(Date dateOfSale) {
+    public void setDateOfSale(LocalDate dateOfSale) {
         this.dateOfSale = dateOfSale;
     }
 
-    public int getBillNumber() {
+    public String getBillNumber() {
         return billNumber;
     }
 
-    public void setBillNumber(int billNumber) {
+    public void setBillNumber(String billNumber) {
         this.billNumber = billNumber;
     }
 
@@ -81,5 +81,18 @@ public class Sale {
 
     public void setStatus(SaleStatus status) {
         this.status = status;
+    }
+
+    public void fixedSale(LocalDate currentDate, int billNumber) {
+        if (!getStatus().equals(SaleStatus.OFFER)) {
+            throw new RuntimeException(String.format("sale with id %s doesnt have status 'OFFER'", getId()));
+        }
+        setDateOfSale(currentDate);
+        setStatus(SaleStatus.FIX);
+        setBillNumber(generateBillNumber(billNumber));
+    }
+
+    private String generateBillNumber(int billNumber) {
+        return String.format("%06d", billNumber);
     }
 }

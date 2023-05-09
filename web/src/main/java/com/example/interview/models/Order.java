@@ -6,6 +6,9 @@ import org.hibernate.annotations.OnDeleteAction;
 import javax.persistence.*;
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
+import java.math.BigDecimal;
+import java.math.RoundingMode;
+import java.util.Objects;
 
 @Entity
 @Table(name = "orders")
@@ -30,18 +33,19 @@ public class Order {
 
     // Храним в копейках, делим на 100
     @Column(name = "initial_total_price")
-    private long initialTotalPrice;
+    private BigDecimal initialTotalPrice;
 
     // Храним в копейках, делим на 100
     @Column(name = "end_total_price")
-    private long endTotalPrice;
+    private BigDecimal endTotalPrice;
 
     @Min(value = 0, message = "The discount2 must be positive")
     @Max(value = 100, message = "The discount2 must be less than 100")
     @Column(name = "total_discount")
-    private float totalDiscount;
+    private BigDecimal totalDiscount;
 
-    public Order() {}
+    public Order() {
+    }
 
     public long getId() {
         return id;
@@ -75,27 +79,65 @@ public class Order {
         this.count = count;
     }
 
-    public long getInitialTotalPrice() {
+    public BigDecimal getInitialTotalPrice() {
         return initialTotalPrice;
     }
 
-    public void setInitialTotalPrice(long initialTotalPrice) {
+    public void setInitialTotalPrice(BigDecimal initialTotalPrice) {
         this.initialTotalPrice = initialTotalPrice;
     }
 
-    public long getEndTotalPrice() {
+    public BigDecimal getEndTotalPrice() {
         return endTotalPrice;
     }
 
-    public void setEndTotalPrice(long endTotalPrice) {
+    public void setEndTotalPrice(BigDecimal endTotalPrice) {
         this.endTotalPrice = endTotalPrice;
     }
 
-    public float getTotalDiscount() {
+    public BigDecimal getTotalDiscount() {
         return totalDiscount;
     }
 
-    public void setTotalDiscount(float totalDiscount) {
+    public void setTotalDiscount(BigDecimal totalDiscount) {
+        if (totalDiscount.doubleValue() > 18d) {
+            totalDiscount = BigDecimal.valueOf(18);
+        }
         this.totalDiscount = totalDiscount;
+    }
+
+    public void increaseCount() {
+        this.count = this.count + 1;
+    }
+
+    public void decreaseCount() {
+        if (count == 0) {
+            return;
+        }
+        this.count = this.count - 1;
+    }
+
+    public void calculateTotal() {
+        Objects.requireNonNull(this.sale, "sale doesnt set");
+        Client client = this.sale.getClient();
+        Objects.requireNonNull(client, String.format("client doesnt set for sale with id %s", sale.getId()));
+        Objects.requireNonNull(product, String.format("product doesnt set for sale with id %s", sale.getId()));
+        if (!sale.getStatus().equals(SaleStatus.OFFER)) {
+            throw new RuntimeException("Calculating total to able about offer");
+        }
+
+        setInitialTotalPrice(product.getPrice().multiply(new BigDecimal(count)));
+
+        BigDecimal personalDiscount;
+        if (count >= 5 && client.getDiscount2().intValue() != 0) {
+            personalDiscount = client.getDiscount2();
+        } else {
+            personalDiscount = client.getDiscount1();
+        }
+        setTotalDiscount(personalDiscount.add(product.getDiscount()));
+
+        setEndTotalPrice(initialTotalPrice.subtract(
+                initialTotalPrice.multiply(totalDiscount
+                                .divide(BigDecimal.valueOf(100), 4, RoundingMode.DOWN))).setScale(2, RoundingMode.DOWN));
     }
 }

@@ -19,4 +19,9 @@ public class ClientSoapServiceImpl implements ClientSoapService {
     public List<Client> getAllClients() {
         return clientService.getAllClients();
     }
+
+    @Override
+    public void setProductRating(long clientId, long productId, int rating) {
+        clientService.setProductRating(clientId, productId, rating);
+    }
 }
