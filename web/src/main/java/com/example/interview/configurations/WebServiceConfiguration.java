@@ -1,7 +1,6 @@
 package com.example.interview.configurations;
 
 import com.example.interview.endpoints.ClientSoapServiceImpl;
-import com.example.interview.endpoints.HelloServiceImpl;
 import com.example.interview.endpoints.ProductSoapServiceImpl;
 import com.example.interview.endpoints.SaleSoapServiceImpl;
 import com.example.interview.services.ClientService;
@@ -27,13 +26,6 @@ public class WebServiceConfiguration {
         this.clientService = clientService;
         this.productService = productService;
         this.saleService = saleService;
-    }
-
-    @Bean
-    public Endpoint helloEndpoint() {
-        EndpointImpl endpoint = new EndpointImpl(bus, new HelloServiceImpl());
-        endpoint.publish("/ServiceHello");
-        return endpoint;
     }
 
     @Bean
